@@ -1,4 +1,18 @@
 package com.todo.deoji.persistence.todo.entity
 
-class TodoJpaEntity {
-}
+import com.todo.deoji.persistence.category.entity.CategoryJpaEntity
+import com.todo.deoji.persistence.user.entity.UserJpaEntity
+import jakarta.persistence.*
+
+@Entity
+@Table(name = "todo")
+class TodoJpaEntity(
+    @Id
+    val id: Long,
+    val name: String,
+    val sort: Int,
+    val colorCode: String,
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    val category: CategoryJpaEntity
+)
