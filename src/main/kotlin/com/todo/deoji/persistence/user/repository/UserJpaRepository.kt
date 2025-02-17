@@ -1,4 +1,8 @@
 package com.todo.deoji.persistence.user.repository
 
-class UserJpaRepository {
+import org.springframework.data.repository.CrudRepository
+import org.springframework.stereotype.Repository
+
+@Repository
+interface UserJpaRepository : CrudRepository<UserJpaRepository, String> {
 }
