@@ -1,16 +1,13 @@
 package com.todo.deoji.persistence.category.entity
 
 import com.todo.deoji.persistence.user.entity.UserJpaEntity
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.Table
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "category")
 class CategoryJpaEntity(
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
     val name: String,
     val sort: Int,

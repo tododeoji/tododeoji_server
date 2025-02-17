@@ -8,6 +8,7 @@ import jakarta.persistence.*
 @Table(name = "todo")
 class TodoJpaEntity(
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
     val name: String,
     val sort: Int,
