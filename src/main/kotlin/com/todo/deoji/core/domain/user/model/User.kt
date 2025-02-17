@@ -7,7 +7,11 @@ data class User(
     val id: String = UUID.randomUUID().toString(),
     val email: String,
     val introduce: String,
-    val profileUrl: String,
-    val profileImgUrl: String,
+    val profileUrl: String?,
+    val profileImgUrl: String?,
     val roles: MutableList<Role>
-)
+) {
+    init {
+        require(email.matches(Regex("^[A-Za-z0-9+_.-]+@(.+)$"))) { "Invalid email format" }
+    }
+}
