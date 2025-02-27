@@ -11,9 +11,7 @@ class UserJpaEntity(
     val id: String = UUID.randomUUID().toString(),
     val email: String,
     val introduce: String,
-    @Column(nullable = false)
     val profileUrl: String?,
-    @Column(nullable = false)
     val profileImgUrl: String?,
     @Enumerated(EnumType.STRING)
     @ElementCollection(fetch = FetchType.EAGER)
