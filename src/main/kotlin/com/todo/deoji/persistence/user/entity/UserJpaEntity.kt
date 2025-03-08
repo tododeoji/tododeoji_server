@@ -9,8 +9,9 @@ import java.util.UUID
 class UserJpaEntity(
     @Id
     val id: String = UUID.randomUUID().toString(),
+    val name: String,
     val email: String,
-    val introduce: String,
+    val introduce: String?,
     val profileUrl: String?,
     val profileImgUrl: String?,
     @Enumerated(EnumType.STRING)

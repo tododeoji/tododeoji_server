@@ -7,6 +7,7 @@ fun UserJpaEntity.toDomain() =
     User(
         id = this.id,
         email = this.email,
+        name = name,
         introduce = this.introduce,
         profileUrl = this.profileUrl,
         profileImgUrl = this.profileImgUrl,
@@ -17,6 +18,7 @@ fun User.toEntity() =
     UserJpaEntity(
         id = this.id,
         email = this.email,
+        name = name,
         introduce = this.introduce,
         profileUrl = this.profileUrl,
         profileImgUrl = this.profileImgUrl,

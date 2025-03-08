@@ -9,7 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
-import java.security.Key
+import javax.crypto.SecretKey
 
 @Component
 class ParseTokenAdapter(
@@ -23,6 +23,7 @@ class ParseTokenAdapter(
         const val PREFIX = "Bearer "
     }
 
+
     fun parseToken(token: String): String? =
         if (token.startsWith(JwtPrefix.PREFIX)) token.substring(JwtPrefix.PREFIX.length) else null
 
@@ -32,33 +33,26 @@ class ParseTokenAdapter(
         if (claims.header[Header.JWT_TYPE] != JwtPrefix.ACCESS)
             throw RuntimeException()
 
-        val userDetails = getDetails(claims.body)
+        val userDetails = getDetails(claims.payload)
 
         return UsernamePasswordAuthenticationToken(userDetails, "", userDetails.authorities)
     }
 
-    fun getJwtType(token: String): String {
-        val claims = getClaims(token, jwtProperty.refreshKey)
-
-        return claims.header[Header.JWT_TYPE] as? String ?: ""
-    }
-
-    private fun getClaims(token: String, secret: Key): Jws<Claims> {
-
-        return try {
-            Jwts.parserBuilder()
-                .setSigningKey(secret)
+    private fun getClaims(token: String, secret: SecretKey): Jws<Claims> =
+        runCatching {
+            Jwts.parser()
+                .verifyWith(secret)
                 .build()
-                .parseClaimsJws(token)
-        } catch (e: Exception) {
-            when (e) {
-                is InvalidClaimException -> throw TokenNotValidException()
-                is ExpiredJwtException -> throw ExpiredTokenException()
-                is JwtException -> throw TokenNotValidException()
-                else -> throw RuntimeException()
+                .parseSignedClaims(token)
+        }.getOrElse { exception ->
+            throw when (exception) {
+                is InvalidClaimException -> TokenNotValidException()
+                is ExpiredJwtException -> ExpiredTokenException()
+                is JwtException -> TokenNotValidException()
+                else -> RuntimeException()
             }
         }
-    }
+
 
     private fun getDetails(body: Claims): UserDetails {
         val username = body.id
