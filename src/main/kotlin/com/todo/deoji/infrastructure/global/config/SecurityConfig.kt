@@ -2,10 +2,13 @@ package com.todo.deoji.infrastructure.global.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.todo.deoji.infrastructure.global.jwt.adapter.ParseTokenAdapter
+import com.todo.deoji.infrastructure.global.oauth.handler.OAuth2SuccessHandler
+import com.todo.deoji.infrastructure.global.oauth.service.CustomOAuth2UserService
 import com.todo.deoji.infrastructure.global.security.CustomAccessDeniedHandler
 import com.todo.deoji.infrastructure.global.security.CustomAuthenticationEntryPoint
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
@@ -14,12 +17,14 @@ import org.springframework.security.web.SecurityFilterChain
 class SecurityConfig(
     private val objectMapper: ObjectMapper,
     private val parseTokenAdapter: ParseTokenAdapter,
-    private val customAccessDeniedHandler: CustomAccessDeniedHandler
+    private val customAccessDeniedHandler: CustomAccessDeniedHandler,
+    private val customOAuth2SuccessHandler: OAuth2SuccessHandler,
+    private val customOAuth2UserService: CustomOAuth2UserService
 ) {
     @Bean
     protected fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .cors { }
+            .cors { it.disable() }
             .csrf { it.disable() }
             .formLogin { it.disable() }
             .httpBasic { it.disable() }
@@ -31,10 +36,19 @@ class SecurityConfig(
 
         http
             .authorizeHttpRequests {
+                it.requestMatchers("/").permitAll()
+                it.requestMatchers(HttpMethod.GET  , "/auth/signIn").permitAll()
+                it.requestMatchers(HttpMethod.GET, "/favicon.ico").permitAll()
                 it.anyRequest().denyAll()
             }
 
-        FilterConfig(objectMapper, parseTokenAdapter)
+        http
+            .oauth2Login { oauth ->
+                oauth.userInfoEndpoint { c -> c.userService(customOAuth2UserService) }
+                    .successHandler(customOAuth2SuccessHandler)
+            }
+
+        FilterConfig(objectMapper, parseTokenAdapter).configure(http)
 
         http
             .exceptionHandling {
