@@ -5,8 +5,9 @@ import java.util.UUID
 
 data class User(
     val id: String = UUID.randomUUID().toString(),
+    val name: String,
     val email: String,
-    val introduce: String,
+    val introduce: String?,
     val profileUrl: String?,
     val profileImgUrl: String?,
     val roles: MutableList<Role>
