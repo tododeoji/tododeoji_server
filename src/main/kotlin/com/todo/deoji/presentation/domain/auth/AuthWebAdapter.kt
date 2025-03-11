@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam
 class AuthWebAdapter(
     private val signInUseCase: SignInUseCase
 ) {
-    @GetMapping("/signIn")
-    fun loginSuccess(@RequestParam(name = "username") userId: String): ResponseEntity<SignInResponseData> =
+    @GetMapping("/login")
+    fun googleLogin(@RequestParam(name = "username") userId: String): ResponseEntity<SignInResponseData> =
         ResponseEntity.ok(signInUseCase.execute(userId).toSignInResponseData())
 }
