@@ -2,6 +2,7 @@ package com.todo.deoji.infrastructure.global.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.todo.deoji.infrastructure.global.jwt.adapter.ParseTokenAdapter
+import com.todo.deoji.infrastructure.global.oauth.handler.CustomOAuth2FailureHandler
 import com.todo.deoji.infrastructure.global.oauth.handler.OAuth2SuccessHandler
 import com.todo.deoji.infrastructure.global.oauth.service.CustomOAuth2UserService
 import com.todo.deoji.infrastructure.global.security.CustomAccessDeniedHandler
@@ -19,7 +20,8 @@ class SecurityConfig(
     private val parseTokenAdapter: ParseTokenAdapter,
     private val customAccessDeniedHandler: CustomAccessDeniedHandler,
     private val customOAuth2SuccessHandler: OAuth2SuccessHandler,
-    private val customOAuth2UserService: CustomOAuth2UserService
+    private val customOAuth2UserService: CustomOAuth2UserService,
+    private val customOAuth2FailureHandler: CustomOAuth2FailureHandler
 ) {
     @Bean
     protected fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -36,16 +38,19 @@ class SecurityConfig(
 
         http
             .authorizeHttpRequests {
-                it.requestMatchers("/").permitAll()
-                it.requestMatchers(HttpMethod.GET  , "/auth/signIn").permitAll()
+                it.requestMatchers(HttpMethod.GET, "/auth/login").permitAll()
                 it.requestMatchers(HttpMethod.GET, "/favicon.ico").permitAll()
                 it.anyRequest().denyAll()
             }
 
         http
             .oauth2Login { oauth ->
-                oauth.userInfoEndpoint { c -> c.userService(customOAuth2UserService) }
+                oauth.userInfoEndpoint { c ->
+                    c.userService(customOAuth2UserService)
+                }
                     .successHandler(customOAuth2SuccessHandler)
+                    .failureHandler(customOAuth2FailureHandler)
+
             }
 
         FilterConfig(objectMapper, parseTokenAdapter).configure(http)
