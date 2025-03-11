@@ -14,7 +14,7 @@ class OAuth2SuccessHandler : AuthenticationSuccessHandler {
         response: HttpServletResponse?,
         authentication: Authentication?
     ) {
-        UriComponentsBuilder.fromUriString("/auth/signIn")
+        UriComponentsBuilder.fromUriString("/auth/login")
             .queryParam("username", authentication?.name)
             .build().toUriString()
             .let { response?.sendRedirect(it) }
