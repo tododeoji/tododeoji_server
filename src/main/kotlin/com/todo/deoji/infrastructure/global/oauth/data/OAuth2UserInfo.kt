@@ -37,9 +37,9 @@ class OAuth2UserInfo private constructor(
         private fun Map<String, Any>.toNaverUserInfo(): OAuth2UserInfo {
             val response = this["response"] as? Map<*, *> ?: emptyMap<String, Any>()
             return OAuth2UserInfo(
-                name = response["name"] as String ?: "Unknown",
+                name = response["name"] as? String ?: "Unknown",
                 email = response["email"] as? String ?: throw IllegalArgumentException("Naver 이메일 없음"),
-                profile = response["profile_image"] as String?,
+                profile = response["profile_image"] as? String
             )
         }
     }
