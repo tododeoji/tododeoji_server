@@ -13,6 +13,7 @@ class OAuth2UserInfo private constructor(
             when (registrationId) {
                 "google" -> attributes.toGoogleUserInfo()
                 "kakao" -> attributes.toKakaoUserInfo()
+                "naver" -> attributes.toNaverUserInfo()
                 else -> throw IllegalArgumentException("지원하지 않는 OAuth 제공자: $registrationId")
             }
 
@@ -30,6 +31,15 @@ class OAuth2UserInfo private constructor(
                 name = profile["nickname"] as? String ?: "Unknown",
                 email = account["email"] as? String ?: throw IllegalArgumentException("Kakao 이메일 없음"),
                 profile = profile["profile_image_url"] as? String
+            )
+        }
+
+        private fun Map<String, Any>.toNaverUserInfo(): OAuth2UserInfo {
+            val response = this["response"] as? Map<*, *> ?: emptyMap<String, Any>()
+            return OAuth2UserInfo(
+                name = response["name"] as String ?: "Unknown",
+                email = response["email"] as? String ?: throw IllegalArgumentException("Naver 이메일 없음"),
+                profile = response["profile_image"] as String?,
             )
         }
     }
