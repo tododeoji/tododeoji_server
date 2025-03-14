@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional
 
 
 @Component
-@Transactional(rollbackFor = [Exception::class])
 class CustomOAuth2UserService(
     private val userPort: UserPort
 ) : DefaultOAuth2UserService() {

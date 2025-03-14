@@ -23,25 +23,29 @@ class OAuth2UserInfo private constructor(
             profile = this["picture"] as? String
         )
 
-        private fun Map<String, Any>.toKakaoUserInfo(): OAuth2UserInfo {
-            val account = this["kakao_account"] as? Map<*, *> ?: emptyMap<String, Any>()
-            val profile = account["profile"] as? Map<*, *> ?: emptyMap<String, Any>()
+        private fun Map<String, Any>.toKakaoUserInfo(): OAuth2UserInfo =
+            (this["kakao_account"] as? Map<*, *>)?.let { account ->
+                (account["profile"] as? Map<*, *>)?.let { profile ->
+                    OAuth2UserInfo(
+                        name = profile["nickname"] as? String ?: "Unknown",
+                        email = account["email"] as? String ?: throw IllegalArgumentException("Kakao 이메일 없음"),
+                        profile = profile["profile_image_url"] as? String
+                    )
+                }
+            } ?: throw IllegalArgumentException("카카오 에러")
 
-            return OAuth2UserInfo(
-                name = profile["nickname"] as? String ?: "Unknown",
-                email = account["email"] as? String ?: throw IllegalArgumentException("Kakao 이메일 없음"),
-                profile = profile["profile_image_url"] as? String
-            )
-        }
+        private fun Map<String, Any>.toNaverUserInfo(): OAuth2UserInfo =
+            (this["response"] as? Map<*, *>)
+                ?.filterKeys { it is String }
+                ?.mapKeys { it.key as String }
+                ?.let {
+                    OAuth2UserInfo(
+                        name = it["name"] as? String ?: "Unknown",
+                        email = it["email"] as? String ?: throw IllegalArgumentException("Naver 이메일 없음"),
+                        profile = it["profile_image"] as? String
+                    )
+                } ?: throw IllegalArgumentException("Naver 에러")
 
-        private fun Map<String, Any>.toNaverUserInfo(): OAuth2UserInfo {
-            val response = this["response"] as? Map<*, *> ?: emptyMap<String, Any>()
-            return OAuth2UserInfo(
-                name = response["name"] as? String ?: "Unknown",
-                email = response["email"] as? String ?: throw IllegalArgumentException("Naver 이메일 없음"),
-                profile = response["profile_image"] as? String
-            )
-        }
     }
 
     fun toEntity(): User = User(
