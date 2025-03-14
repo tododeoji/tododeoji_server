@@ -5,7 +5,7 @@ import com.todo.deoji.core.domain.auth.dto.response.TokenResponseDto
 import com.todo.deoji.core.domain.auth.spi.JwtPort
 
 @UseCase
-class SignInUseCase(
+class LoginUseCase(
     private val jwtPort: JwtPort
 ) {
     fun execute(userId: String): TokenResponseDto =
