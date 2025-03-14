@@ -1,6 +1,6 @@
 package com.todo.deoji.presentation.domain.auth
 
-import com.todo.deoji.core.domain.auth.usecase.SignInUseCase
+import com.todo.deoji.core.domain.auth.usecase.LoginUseCase
 import com.todo.deoji.presentation.common.WebAdapter
 import com.todo.deoji.presentation.domain.auth.data.extenstion.toSignInResponseData
 import com.todo.deoji.presentation.domain.auth.data.response.SignInResponseData
@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam
 
 @WebAdapter("/auth")
 class AuthWebAdapter(
-    private val signInUseCase: SignInUseCase
+    private val loginUseCase: LoginUseCase
 ) {
     @GetMapping("/login")
     fun googleLogin(@RequestParam(name = "username") userId: String): ResponseEntity<SignInResponseData> =
-        ResponseEntity.ok(signInUseCase.execute(userId).toSignInResponseData())
+        ResponseEntity.ok(loginUseCase.execute(userId).toSignInResponseData())
 }
