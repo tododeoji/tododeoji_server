@@ -17,7 +17,7 @@ class AddCategoryUseCase(
                 categoryPort.save(
                     Category(
                         id = 0,
-                        name = addCategoryRequestDto.cateGoryName,
+                        name = addCategoryRequestDto.categoryName,
                         hideStatus = false,
                         sort = categoryPort.findMaxSortByUserId(user.id) + 1,
                         colorCode = addCategoryRequestDto.colorCode,
