@@ -11,6 +11,7 @@ fun CategoryJpaEntity.toDomain() =
         name = this.name,
         sort = this.sort,
         colorCode = this.colorCode,
+        hideStatus = this.hideStatus,
         user = this.user.toDomain()
     )
 
@@ -20,5 +21,6 @@ fun Category.toEntity() =
         name = this.name,
         sort = this.sort,
         colorCode = this.colorCode,
+        hideStatus = this.hideStatus,
         user = this.user.toEntity()
     )

@@ -19,6 +19,7 @@ enum class ErrorCode(
     NOT_VALID_CODE("코드가 유효하지 않음", 403),
 
     BAD_REQUEST("잘못된 접근입니다", 404),
+    USER_NOT_FOUND("해당 유저를 찾을 수 없습니다.", 404),
 
     INTERNAL_ERROR("알수 없는 에러입니다", 500)
 }

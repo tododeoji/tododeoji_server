@@ -7,5 +7,6 @@ data class Category(
     val name: String,
     val sort: Int,
     val colorCode: String,
+    val hideStatus: Boolean,
     val user: User
 )

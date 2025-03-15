@@ -23,15 +23,14 @@ class ParseTokenAdapter(
         const val PREFIX = "Bearer "
     }
 
-
     fun parseToken(token: String): String? =
         if (token.startsWith(JwtPrefix.PREFIX)) token.substring(JwtPrefix.PREFIX.length) else null
 
     fun getAuthentication(token: String): Authentication {
         val claims = getClaims(token, jwtProperty.secretKey)
 
-        if (claims.header[Header.JWT_TYPE] != JwtPrefix.ACCESS)
-            throw RuntimeException()
+        if (claims.payload["type"] != JwtPrefix.ACCESS)
+            throw TokenNotValidException()
 
         val userDetails = getDetails(claims.payload)
 
@@ -53,11 +52,8 @@ class ParseTokenAdapter(
             }
         }
 
-
-    private fun getDetails(body: Claims): UserDetails {
-        val username = body.id
-
-        return authDetailsService.loadUserByUsername(username)
-    }
+    private fun getDetails(body: Claims): UserDetails =
+        body.subject
+            .let { authDetailsService.loadUserByUsername(it) }
 
 }

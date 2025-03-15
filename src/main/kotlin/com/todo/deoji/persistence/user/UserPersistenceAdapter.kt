@@ -10,14 +10,13 @@ import kotlin.jvm.optionals.getOrNull
 
 @Component
 class UserPersistenceAdapter(
-    private val userJpaRepository: UserJpaRepository
+    private val userJpaRepository: UserJpaRepository,
 ) : UserPort {
     override fun findByEmail(email: String): User? =
         userJpaRepository.findByEmail(email)?.toDomain()
 
     override fun findById(id: String): User? =
         userJpaRepository.findById(id).getOrNull()?.toDomain()
-
 
     override fun save(user: User): User =
         userJpaRepository.save(user.toEntity()).toDomain()

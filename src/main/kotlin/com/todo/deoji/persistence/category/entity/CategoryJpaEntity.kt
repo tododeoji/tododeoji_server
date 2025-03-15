@@ -12,6 +12,7 @@ class CategoryJpaEntity(
     val name: String,
     val sort: Int,
     val colorCode: String,
+    val hideStatus: Boolean,
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     val user: UserJpaEntity
