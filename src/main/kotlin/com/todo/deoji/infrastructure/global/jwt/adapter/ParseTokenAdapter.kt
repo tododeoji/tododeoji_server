@@ -30,7 +30,7 @@ class ParseTokenAdapter(
         val claims = getClaims(token, jwtProperty.secretKey)
 
         if (claims.payload["type"] != JwtPrefix.ACCESS)
-            throw RuntimeException("Invalid JWT type")
+            throw TokenNotValidException()
 
         val userDetails = getDetails(claims.payload)
 
