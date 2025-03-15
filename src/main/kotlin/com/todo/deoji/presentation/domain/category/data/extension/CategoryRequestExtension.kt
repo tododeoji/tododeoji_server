@@ -6,6 +6,6 @@ import com.todo.deoji.presentation.domain.category.data.request.AddCategoryReque
 
 fun AddCategoryRequestData.toAddCategoryRequestDto(): AddCategoryRequestDto =
     AddCategoryRequestDto(
-        cateGoryName = this.cateGoryName,
+        categoryName = this.categoryName,
         colorCode = this.colorCode
     )
