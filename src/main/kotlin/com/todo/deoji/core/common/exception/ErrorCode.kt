@@ -20,6 +20,7 @@ enum class ErrorCode(
 
     BAD_REQUEST("잘못된 접근입니다", 404),
     USER_NOT_FOUND("해당 유저를 찾을 수 없습니다.", 404),
+    CATEGORY_NOT_FOUND("카테고리를 찾을 수 없습니다.", 404),
 
     INTERNAL_ERROR("알수 없는 에러입니다", 500)
 }

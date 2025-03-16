@@ -39,8 +39,13 @@ class SecurityConfig(
         http
             .authorizeHttpRequests {
                 it.requestMatchers(HttpMethod.GET, "/auth/login").permitAll()
+
                 it.requestMatchers(HttpMethod.GET, "/favicon.ico").permitAll()
+
                 it.requestMatchers(HttpMethod.POST, "/category").authenticated()
+
+                it.requestMatchers(HttpMethod.POST, "/todo").authenticated()
+
                 it.anyRequest().denyAll()
             }
 
