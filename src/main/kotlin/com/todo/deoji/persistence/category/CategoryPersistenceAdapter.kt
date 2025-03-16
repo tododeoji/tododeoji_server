@@ -1,5 +1,6 @@
 package com.todo.deoji.persistence.category
 
+import com.todo.deoji.core.domain.category.exception.CategoryNotFoundException
 import com.todo.deoji.core.domain.category.model.Category
 import com.todo.deoji.core.domain.category.spi.CategoryPort
 import com.todo.deoji.persistence.category.adapter.toDomain
@@ -19,4 +20,8 @@ class CategoryPersistenceAdapter(
     override fun findMaxSortByUserId(userId: String): Int =
         categoryCustomRepository.findMaxSortByUserId(userId)
 
+    override fun findById(categoryId: Long): Category =
+        categoryJpaRepository.findById(categoryId)
+            .orElseThrow { CategoryNotFoundException() }
+            .toDomain()
 }
