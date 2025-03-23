@@ -23,7 +23,7 @@ class GetTodoMainUseCase(
                                 (1..totalDay)
                                     .map { day ->
                                         GetMainDataResponseDto(
-                                            day = "$year-$month-$day",
+                                            day = String.format("%04d-%02d-%02d", year, month, day),
                                             todoList = todoDataList
                                                 .filter { it.todoDate.dayOfMonth == day }
                                         )
