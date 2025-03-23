@@ -45,6 +45,7 @@ class SecurityConfig(
                 it.requestMatchers(HttpMethod.POST, "/category").authenticated()
 
                 it.requestMatchers(HttpMethod.POST, "/todo").authenticated()
+                it.requestMatchers(HttpMethod.GET, "/todo/list").authenticated()
 
                 it.anyRequest().denyAll()
             }
