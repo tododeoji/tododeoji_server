@@ -1,5 +1,6 @@
 package com.todo.deoji.persistence.todo.repository.impl
 
+import com.querydsl.core.types.Projections
 import com.querydsl.jpa.impl.JPAQueryFactory
 import com.todo.deoji.core.domain.category.model.Category
 import com.todo.deoji.core.domain.todo.dto.response.GetMainDataTodoResponseDto
@@ -33,18 +34,25 @@ class TodoCustomRepositoryImpl(
                     .fetchOne() ?: 0
             }
 
-    override fun findAllByMonthAndYearAndUser(month: Int, year: Int, user: UserJpaEntity): List<GetMainDataTodoResponseDto> {
+    override fun findAllByMonthAndYearAndUser(
+        month: Int,
+        year: Int,
+        user: UserJpaEntity
+    ): List<GetMainDataTodoResponseDto> {
         val qTodo = QTodoJpaEntity.todoJpaEntity
         val qCategory = QCategoryJpaEntity.categoryJpaEntity
 
         return jpaQueryFactory
             .select(
-                qTodo.id,
-                qTodo.activeStatus,
-                qTodo.runDate,
-                qTodo.name,
-                qCategory.name,
-                qCategory.colorCode
+                Projections.constructor(
+                    GetMainDataTodoResponseDto::class.java,
+                    qTodo.id,
+                    qTodo.activeStatus,
+                    qTodo.runDate,
+                    qTodo.name,
+                    qCategory.name,
+                    qCategory.colorCode
+                )
             )
             .from(qTodo)
             .join(qTodo.category, qCategory)
@@ -57,17 +65,6 @@ class TodoCustomRepositoryImpl(
                 qTodo.runDate.month().eq(month)
             )
             .fetch()
-            .map {
-                GetMainDataTodoResponseDto(
-                    id = it.get(0, Long::class.java)!!,
-                    activeStatus = it.get(1, TodoActiveStatus::class.java)!!,
-                    todoDate = it.get(2, LocalDateTime::class.java)!!,
-                    todoName = it.get(3, String::class.java)!!,
-                    categoryName = it.get(4, String::class.java)!!,
-                    categoryColorCode = it.get(5, String::class.java)!!
-                )
-            }
-
     }
 
     override fun findAllByCategoryAndMonthAndYear(categoryIds: List<Long>, month: Int, year: Int): List<TodoJpaEntity> =
