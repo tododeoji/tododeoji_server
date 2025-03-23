@@ -1,12 +1,15 @@
 package com.todo.deoji.persistence.todo
 
 import com.todo.deoji.core.domain.category.model.Category
+import com.todo.deoji.core.domain.todo.dto.response.GetMainDataTodoResponseDto
 import com.todo.deoji.core.domain.todo.model.Todo
 import com.todo.deoji.core.domain.todo.spi.TodoPort
+import com.todo.deoji.core.domain.user.model.User
 import com.todo.deoji.persistence.todo.adapter.toDomain
 import com.todo.deoji.persistence.todo.adapter.toEntity
 import com.todo.deoji.persistence.todo.repository.TodoCustomRepository
 import com.todo.deoji.persistence.todo.repository.TodoJpaRepository
+import com.todo.deoji.persistence.user.adapter.toEntity
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 
@@ -20,5 +23,16 @@ class TodoPersistenceAdapter(
 
     override fun findMaxSortByCategoryAndRunDate(category: Category, runDate: LocalDateTime): Int =
         todoCustomRepository.findMaxSortByCategoryAndRunDate(category, runDate)
+
+    override fun findAllByMonthAndYearAndUser(month: Int, year: Int, user: User): List<GetMainDataTodoResponseDto> =
+        todoCustomRepository.findAllByMonthAndYearAndUser(month, year, user.toEntity())
+
+    override fun findAllByCategoryIdsAndMonthAndYear(
+        categoryIds: List<Long>,
+        month: Int,
+        year: Int
+    ): List<Todo> =
+        todoCustomRepository.findAllByCategoryAndMonthAndYear(categoryIds, month, year)
+            .map { it.toDomain() }
 
 }
