@@ -10,6 +10,8 @@ import com.todo.deoji.presentation.domain.todo.data.extension.toGetTodoMainListR
 import com.todo.deoji.presentation.domain.todo.data.request.AddTodoRequestData
 import com.todo.deoji.presentation.domain.todo.data.response.GetMainTodoResponseData
 import com.todo.deoji.presentation.domain.todo.data.response.GetTodoMainListResponseData
+import jakarta.validation.constraints.Max
+import jakarta.validation.constraints.Min
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -37,8 +39,8 @@ class TodoWebAdapter(
 
     @GetMapping("/list")
     fun getTodoListByYearAndMonth(
-        @RequestParam(name = "month") month: Int,
-        @RequestParam(name = "year") year: Int
+        @RequestParam(name = "month") @Min(1) @Max(12) month: Int,
+        @RequestParam(name = "year")  @Min(1) year: Int
     ): ResponseEntity<List<GetMainTodoResponseData>> =
         ResponseEntity.ok().body(getTodoMainUseCase.execute(month, year).map { it.toGetMainTodoResponseData() })
 
