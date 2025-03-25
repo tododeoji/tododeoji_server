@@ -7,7 +7,7 @@ fun AddTodoRequestData.toAddTodoRequestDto(): AddTodoRequestDto =
     AddTodoRequestDto(
         todoName = this.todoName,
         activeStatus = this.activeStatus,
-        startDateTime = this.startDate,
-        endDateTime = this.endDate,
+        startDateTime = this.startDateTime,
+        endDateTime = this.endDateTime,
         categoryId = this.categoryId
     )
