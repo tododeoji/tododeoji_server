@@ -19,8 +19,13 @@ class AddTodoUseCase(
                         id = 0,
                         name = addTodoRequestDto.todoName,
                         activeStatus = addTodoRequestDto.activeStatus,
-                        runDate = addTodoRequestDto.runDate,
-                        sort = todoPort.findMaxSortByCategoryAndRunDate(category, addTodoRequestDto.runDate) + 1,
+                        startDateTime = addTodoRequestDto.startDateTime,
+                        endDateTime = addTodoRequestDto.endDateTime,
+                        sort = todoPort.findMaxSortByCategoryAndStartDateAndEndDate(
+                            category,
+                            addTodoRequestDto.startDateTime,
+                            addTodoRequestDto.endDateTime
+                        ) + 1,
                         category = category
                     )
                 )

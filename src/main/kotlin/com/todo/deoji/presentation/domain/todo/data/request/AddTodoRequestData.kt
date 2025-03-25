@@ -7,5 +7,6 @@ data class AddTodoRequestData(
     val todoName: String,
     val activeStatus: TodoActiveStatus,
     val categoryId: Long,
-    val runDate: LocalDateTime
+    val startDate: LocalDateTime,
+    val endDate: LocalDateTime
 )
