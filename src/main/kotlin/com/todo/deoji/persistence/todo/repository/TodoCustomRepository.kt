@@ -10,7 +10,16 @@ import java.time.LocalDateTime
 
 @Repository
 interface TodoCustomRepository {
-    fun findMaxSortByCategoryAndRunDate(category: Category, runDate: LocalDateTime): Int
-    fun findAllByMonthAndYearAndUser(month: Int, year: Int, user: UserJpaEntity): List<GetMainDataTodoResponseDto>
+    fun findMaxSortByCategoryAndStartDateAndEndDate(
+        category: Category,
+        startDate: LocalDateTime,
+        endDate: LocalDateTime
+    ): Int
+
+    fun findAllByMonthAndYearAndUser(
+        month: Int, year: Int, lastDayOfMonth: Int,
+        user: UserJpaEntity
+    ): List<GetMainDataTodoResponseDto>
+
     fun findAllByCategoryAndMonthAndYear(categoryIds: List<Long>, month: Int, year: Int): List<TodoJpaEntity>
 }
