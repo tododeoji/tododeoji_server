@@ -19,7 +19,11 @@ import java.time.LocalDateTime
 class TodoCustomRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory
 ) : TodoCustomRepository {
-    override fun findMaxSortByCategoryAndRunDate(category: Category, runDate: LocalDateTime): Int =
+    override fun findMaxSortByCategoryAndStartDateAndEndDate(
+        category: Category,
+        startDate: LocalDateTime,
+        endDate: LocalDateTime
+    ): Int =
         QTodoJpaEntity.todoJpaEntity
             .let { qTodo ->
                 jpaQueryFactory
@@ -27,9 +31,9 @@ class TodoCustomRepositoryImpl(
                     .from(qTodo)
                     .where(
                         qTodo.category.eq(category.toEntity()),
-                        qTodo.runDate.year().eq(runDate.year),
-                        qTodo.runDate.month().eq(runDate.monthValue),
-                        qTodo.runDate.dayOfMonth().eq(runDate.dayOfMonth)
+//                        qTodo.startDate.year().eq(startDate.year),
+//                        qTodo.startDate.month().eq(startDate.monthValue),
+//                        qTodo.startDate.dayOfMonth().eq(startDate.dayOfMonth),
                     )
                     .fetchOne() ?: 0
             }
@@ -37,6 +41,7 @@ class TodoCustomRepositoryImpl(
     override fun findAllByMonthAndYearAndUser(
         month: Int,
         year: Int,
+        lastDayOfMonth: Int,
         user: UserJpaEntity
     ): List<GetMainDataTodoResponseDto> {
         val qTodo = QTodoJpaEntity.todoJpaEntity
@@ -48,7 +53,8 @@ class TodoCustomRepositoryImpl(
                     GetMainDataTodoResponseDto::class.java,
                     qTodo.id,
                     qTodo.activeStatus,
-                    qTodo.runDate,
+                    qTodo.startDateTime,
+                    qTodo.endDateTime,
                     qTodo.name,
                     qCategory.name,
                     qCategory.colorCode
@@ -56,13 +62,11 @@ class TodoCustomRepositoryImpl(
             )
             .from(qTodo)
             .join(qTodo.category, qCategory)
-            .on(
-                qCategory.hideStatus.isFalse,
-                qCategory.user.eq(user)
-            )
             .where(
-                qTodo.runDate.year().eq(year),
-                qTodo.runDate.month().eq(month)
+                qCategory.hideStatus.isFalse,
+                qCategory.user.eq(user),
+                qTodo.startDateTime.loe(LocalDateTime.of(year, month, lastDayOfMonth, 23, 59, 59)),
+                qTodo.endDateTime.goe(LocalDateTime.of(year, month, 1, 0, 0, 0))
             )
             .fetch()
     }
@@ -74,8 +78,8 @@ class TodoCustomRepositoryImpl(
                     .selectFrom(qTodo)
                     .where(
                         qTodo.category.id.`in`(categoryIds),
-                        qTodo.runDate.year().eq(year),
-                        qTodo.runDate.month().eq(month)
+                        qTodo.startDateTime.year().eq(year),
+                        qTodo.startDateTime.month().eq(month)
                     )
                     .fetch()
             }
