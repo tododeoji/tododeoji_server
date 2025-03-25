@@ -7,7 +7,16 @@ import com.todo.deoji.core.domain.user.model.User
 import java.time.LocalDateTime
 
 interface QueryTodoPort {
-    fun findMaxSortByCategoryAndRunDate(category: Category, runDate: LocalDateTime): Int
-    fun findAllByMonthAndYearAndUser(month: Int, year: Int, user: User): List<GetMainDataTodoResponseDto>
+    fun findMaxSortByCategoryAndStartDateAndEndDate(
+        category: Category,
+        startDate: LocalDateTime,
+        endDate: LocalDateTime
+    ): Int
+
+    fun findAllByMonthAndYearAndUser(
+        month: Int, year: Int, lastDayOfMonth: Int,
+        user: User
+    ): List<GetMainDataTodoResponseDto>
+
     fun findAllByCategoryIdsAndMonthAndYear(categoryIds: List<Long>, month: Int, year: Int): List<Todo>
 }

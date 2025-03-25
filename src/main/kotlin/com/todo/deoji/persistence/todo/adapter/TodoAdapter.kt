@@ -11,7 +11,8 @@ fun TodoJpaEntity.toDomain() =
         name = this.name,
         sort = this.sort,
         activeStatus = this.activeStatus,
-        runDate = this.runDate,
+        startDateTime = this.startDateTime,
+        endDateTime = this.endDateTime,
         category = this.category.toDomain()
     )
 
@@ -21,6 +22,7 @@ fun Todo.toEntity() =
         name = this.name,
         sort = this.sort,
         activeStatus = this.activeStatus,
-        runDate = this.runDate,
+        startDateTime = this.startDateTime,
+        endDateTime = this.endDateTime,
         category = this.category.toEntity()
     )

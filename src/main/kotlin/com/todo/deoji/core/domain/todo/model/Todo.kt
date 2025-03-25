@@ -8,6 +8,7 @@ data class Todo(
     val name: String,
     val sort: Int,
     val activeStatus: TodoActiveStatus,
-    val runDate: LocalDateTime,
+    val startDateTime: LocalDateTime,
+    val endDateTime: LocalDateTime,
     val category: Category
 )

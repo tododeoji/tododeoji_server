@@ -16,7 +16,8 @@ class TodoJpaEntity(
     val sort: Int,
     @Enumerated(EnumType.STRING)
     val activeStatus: TodoActiveStatus,
-    val runDate: LocalDateTime,
+    val startDateTime: LocalDateTime,
+    val endDateTime: LocalDateTime,
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     val category: CategoryJpaEntity

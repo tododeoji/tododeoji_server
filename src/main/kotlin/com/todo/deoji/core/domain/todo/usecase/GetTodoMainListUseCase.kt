@@ -49,7 +49,7 @@ class GetTodoMainListUseCase(
                 categoryDataList = categoryList.mapNotNull { category ->
                     // 현재 날짜(day)에 해당하는 todo만 필터링
                     val groupedTodos = todoByCategory[category.id]
-                        ?.filter { it.runDate.dayOfMonth == day }
+                        ?.filter { it.startDateTime.dayOfMonth == day }
                         .orEmpty()
 
                     // 만약 해당 날짜에 해당하는 투두가 없으면 null 처리 (mapNotNull에서 자동 제거됨)

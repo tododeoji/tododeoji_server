@@ -6,7 +6,8 @@ import java.time.LocalDateTime
 data class GetMainDataTodoResponseDto(
     val id: Long,
     val activeStatus: TodoActiveStatus,
-    val todoDate: LocalDateTime,
+    val startDateTime: LocalDateTime,
+    val endDateTime: LocalDateTime,
     val todoName: String,
     val categoryName: String,
     val categoryColorCode: String
