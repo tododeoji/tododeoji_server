@@ -48,6 +48,7 @@ class SecurityConfig(
                 it.requestMatchers(HttpMethod.GET, "/todo/list").authenticated()
 
                 it.requestMatchers(HttpMethod.GET, "/user/my").authenticated()
+                it.requestMatchers(HttpMethod.PATCH, "/user/edit").authenticated()
 
                 it.anyRequest().denyAll()
             }
