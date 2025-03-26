@@ -27,6 +27,10 @@ class CategoryPersistenceAdapter(
             .orElseThrow { CategoryNotFoundException() }
             .toDomain()
 
+    override fun findByUserId(userId: String): List<Category> =
+        categoryJpaRepository.findAllByUserIdOrderBySortAsc(userId)
+            .map { it.toDomain() }
+
     override fun findAllByUserAndIsNotHideStatus(user: User, hideStatus: Boolean): List<Category> =
         categoryJpaRepository.findAllByUserAndHideStatus(user.toEntity(), hideStatus)
             .map { it.toDomain() }
