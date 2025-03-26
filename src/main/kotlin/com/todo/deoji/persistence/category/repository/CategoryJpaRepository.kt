@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface CategoryJpaRepository : CrudRepository<CategoryJpaEntity, Long>{
+interface CategoryJpaRepository : CrudRepository<CategoryJpaEntity, Long> {
     fun findAllByUserAndHideStatus(userJpaEntity: UserJpaEntity, hideStatus: Boolean): List<CategoryJpaEntity>
+    fun findAllByUserIdOrderBySortAsc(userId: String): List<CategoryJpaEntity>
 }
