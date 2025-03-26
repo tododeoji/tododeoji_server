@@ -43,6 +43,7 @@ class SecurityConfig(
                 it.requestMatchers(HttpMethod.GET, "/favicon.ico").permitAll()
 
                 it.requestMatchers(HttpMethod.POST, "/category").authenticated()
+                it.requestMatchers(HttpMethod.GET, "/category/list").authenticated()
 
                 it.requestMatchers(HttpMethod.POST, "/todo").authenticated()
                 it.requestMatchers(HttpMethod.GET, "/todo/list").authenticated()
