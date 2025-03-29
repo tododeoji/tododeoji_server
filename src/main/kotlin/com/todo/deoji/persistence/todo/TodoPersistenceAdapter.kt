@@ -11,6 +11,7 @@ import com.todo.deoji.persistence.todo.repository.TodoCustomRepository
 import com.todo.deoji.persistence.todo.repository.TodoJpaRepository
 import com.todo.deoji.persistence.user.adapter.toEntity
 import org.springframework.stereotype.Component
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Component
@@ -33,6 +34,9 @@ class TodoPersistenceAdapter(
         user: User
     ): List<GetMainDataTodoResponseDto> =
         todoCustomRepository.findAllByMonthAndYearAndUser(month, year, lastDayOfMonth, user.toEntity())
+
+    override fun findAllByLocalDateAndUser(localDate: LocalDate, user: User): List<GetMainDataTodoResponseDto> =
+        todoCustomRepository.findAllByLocalDateAndUser(localDate, user.toEntity())
 
     override fun findAllByCategoryIdsAndMonthAndYear(
         categoryIds: List<Long>,
