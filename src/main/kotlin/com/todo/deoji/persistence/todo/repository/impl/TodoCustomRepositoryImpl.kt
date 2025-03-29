@@ -5,6 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory
 import com.todo.deoji.core.domain.category.model.Category
 import com.todo.deoji.core.domain.todo.dto.response.GetMainDataTodoResponseDto
 import com.todo.deoji.core.domain.todo.model.TodoActiveStatus
+import com.todo.deoji.core.domain.user.model.User
 import com.todo.deoji.persistence.category.adapter.toEntity
 import com.todo.deoji.persistence.category.entity.QCategoryJpaEntity
 import com.todo.deoji.persistence.todo.entity.QTodoJpaEntity
@@ -13,7 +14,9 @@ import com.todo.deoji.persistence.todo.repository.TodoCustomRepository
 import com.todo.deoji.persistence.user.entity.QUserJpaEntity
 import com.todo.deoji.persistence.user.entity.UserJpaEntity
 import org.springframework.stereotype.Component
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 @Component
 class TodoCustomRepositoryImpl(
@@ -67,6 +70,37 @@ class TodoCustomRepositoryImpl(
                 qCategory.user.eq(user),
                 qTodo.startDateTime.loe(LocalDateTime.of(year, month, lastDayOfMonth, 23, 59, 59)),
                 qTodo.endDateTime.goe(LocalDateTime.of(year, month, 1, 0, 0, 0))
+            )
+            .fetch()
+    }
+
+    override fun findAllByLocalDateAndUser(
+        localDate: LocalDate,
+        user: UserJpaEntity
+    ): List<GetMainDataTodoResponseDto> {
+        val qTodo = QTodoJpaEntity.todoJpaEntity
+        val qCategory = QCategoryJpaEntity.categoryJpaEntity
+
+        return jpaQueryFactory
+            .select(
+                Projections.constructor(
+                    GetMainDataTodoResponseDto::class.java,
+                    qTodo.id,
+                    qTodo.activeStatus,
+                    qTodo.startDateTime,
+                    qTodo.endDateTime,
+                    qTodo.name,
+                    qCategory.name,
+                    qCategory.colorCode
+                )
+            )
+            .from(qTodo)
+            .join(qTodo.category, qCategory)
+            .where(
+                qCategory.hideStatus.isFalse,
+                qCategory.user.eq(user),
+                qTodo.startDateTime.loe(localDate.atStartOfDay()),
+                qTodo.endDateTime.goe(localDate.atTime(LocalTime.MAX))
             )
             .fetch()
     }
