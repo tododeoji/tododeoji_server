@@ -19,6 +19,10 @@ class CategoryPersistenceAdapter(
     override fun save(category: Category): Category =
         categoryJpaRepository.save(category.toEntity()).toDomain()
 
+    override fun saveAll(categoryList: List<Category>) {
+        categoryJpaRepository.saveAll(categoryList.map { it.toEntity() })
+    }
+
     override fun findMaxSortByUserId(userId: String): Int =
         categoryCustomRepository.findMaxSortByUserId(userId)
 

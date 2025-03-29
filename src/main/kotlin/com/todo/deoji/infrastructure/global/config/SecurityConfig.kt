@@ -44,6 +44,8 @@ class SecurityConfig(
 
                 it.requestMatchers(HttpMethod.POST, "/category").authenticated()
                 it.requestMatchers(HttpMethod.GET, "/category/list").authenticated()
+                it.requestMatchers(HttpMethod.PATCH, "/category/edit").authenticated()
+                it.requestMatchers(HttpMethod.PATCH, "/category/edit-detail").authenticated()
 
                 it.requestMatchers(HttpMethod.POST, "/todo").authenticated()
                 it.requestMatchers(HttpMethod.GET, "/todo/list").authenticated()
