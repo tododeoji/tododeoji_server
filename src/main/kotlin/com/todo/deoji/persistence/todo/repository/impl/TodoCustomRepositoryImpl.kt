@@ -117,4 +117,14 @@ class TodoCustomRepositoryImpl(
                     )
                     .fetch()
             }
+
+    override fun findAllByTodoIds(todoIds: List<Long>): List<TodoJpaEntity> =
+        QTodoJpaEntity.todoJpaEntity
+            .let { qTodo ->
+                jpaQueryFactory
+                    .selectFrom(qTodo)
+                    .where(qTodo.id.`in`(todoIds))
+                    .fetch()
+            }
+
 }

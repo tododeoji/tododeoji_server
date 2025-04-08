@@ -24,4 +24,6 @@ interface QueryTodoPort {
     ): List<GetMainDataTodoResponseDto>
 
     fun findAllByCategoryIdsAndMonthAndYear(categoryIds: List<Long>, month: Int, year: Int): List<Todo>
+
+    fun findAllByTodoIds(todoIds: List<Long>): List<Todo>
 }

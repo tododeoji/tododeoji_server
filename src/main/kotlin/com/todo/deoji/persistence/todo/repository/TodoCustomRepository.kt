@@ -26,4 +26,6 @@ interface TodoCustomRepository {
     ): List<GetMainDataTodoResponseDto>
 
     fun findAllByCategoryAndMonthAndYear(categoryIds: List<Long>, month: Int, year: Int): List<TodoJpaEntity>
+
+    fun findAllByTodoIds(todoIds: List<Long>): List<TodoJpaEntity>
 }
