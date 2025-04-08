@@ -50,6 +50,7 @@ class SecurityConfig(
                 it.requestMatchers(HttpMethod.POST, "/todo").authenticated()
                 it.requestMatchers(HttpMethod.GET, "/todo/list").authenticated()
                 it.requestMatchers(HttpMethod.GET, "/todo/status").authenticated()
+                it.requestMatchers(HttpMethod.PATCH, "/todo/edit").authenticated()
 
                 it.requestMatchers(HttpMethod.GET, "/user/my").authenticated()
                 it.requestMatchers(HttpMethod.PATCH, "/user/edit").authenticated()

@@ -1,12 +1,10 @@
 package com.todo.deoji.presentation.domain.todo
 
-import com.todo.deoji.core.domain.todo.usecase.AddTodoUseCase
-import com.todo.deoji.core.domain.todo.usecase.GetStatusTodoListUseCase
-import com.todo.deoji.core.domain.todo.usecase.GetTodoMainListUseCase
-import com.todo.deoji.core.domain.todo.usecase.GetTodoMainUseCase
+import com.todo.deoji.core.domain.todo.usecase.*
 import com.todo.deoji.presentation.common.WebAdapter
 import com.todo.deoji.presentation.domain.todo.data.extension.*
 import com.todo.deoji.presentation.domain.todo.data.request.AddTodoRequestData
+import com.todo.deoji.presentation.domain.todo.data.request.EditTodoRequestData
 import com.todo.deoji.presentation.domain.todo.data.response.GetMainTodoResponseData
 import com.todo.deoji.presentation.domain.todo.data.response.GetStatusTodoListResponseData
 import com.todo.deoji.presentation.domain.todo.data.response.GetTodoMainListResponseData
@@ -15,6 +13,7 @@ import jakarta.validation.constraints.Min
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam
 @WebAdapter("/todo")
 class TodoWebAdapter(
     private val addTodoUseCase: AddTodoUseCase,
+    private val editTodoUseCase: EditTodoUseCase,
     private val getTodoMainListUseCase: GetTodoMainListUseCase,
     private val getTodoMainUseCase: GetTodoMainUseCase,
     private val getStatusTodoListUseCase: GetStatusTodoListUseCase
@@ -29,7 +29,13 @@ class TodoWebAdapter(
     @PostMapping
     fun addTodo(@RequestBody addTodoRequestData: AddTodoRequestData): ResponseEntity<Void> =
         addTodoUseCase.execute(addTodoRequestData.toAddTodoRequestDto())
-            .let { ResponseEntity.status(HttpStatus.CREATED).build() }
+            .run { ResponseEntity.status(HttpStatus.CREATED).build() }
+
+    @PatchMapping("/edit")
+    fun editTodo(@RequestBody editTodoRequestData: EditTodoRequestData): ResponseEntity<Void> =
+        editTodoUseCase.execute(editTodoRequestData.toEditTodoRequestDtoList())
+            .run { ResponseEntity.status(HttpStatus.NO_CONTENT).build() }
+
 
     @GetMapping
     fun getTodoListByYearMonth(
