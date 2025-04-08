@@ -22,6 +22,10 @@ class TodoPersistenceAdapter(
     override fun save(todo: Todo): Todo =
         todoJpaRepository.save(todo.toEntity()).toDomain()
 
+    override fun saveAll(todoList: List<Todo>) {
+        todoJpaRepository.saveAll(todoList.map { it.toEntity() })
+    }
+
     override fun findMaxSortByCategoryAndStartDateAndEndDate(
         category: Category,
         startDate: LocalDateTime,
@@ -45,5 +49,8 @@ class TodoPersistenceAdapter(
     ): List<Todo> =
         todoCustomRepository.findAllByCategoryAndMonthAndYear(categoryIds, month, year)
             .map { it.toDomain() }
+
+    override fun findAllByTodoIds(todoIds: List<Long>): List<Todo> =
+        todoCustomRepository.findAllByTodoIds(todoIds).map { it.toDomain() }
 
 }
