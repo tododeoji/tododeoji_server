@@ -29,7 +29,7 @@ services:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      - tododeoji-db
-      - tododeoji-redis
+      - mysql
+      - redis
     ports:
       - "8080:8080"
