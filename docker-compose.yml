@@ -23,3 +23,13 @@ services:
     container_name: tododeoji-redis
     ports:
       - "6379:6379"
+
+  spring-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - tododeoji-db
+      - tododeoji-redis
+    ports:
+      - "8080:8080"
