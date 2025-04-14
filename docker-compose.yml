@@ -25,9 +25,8 @@ services:
       - "6379:6379"
 
   spring-server:
-    build:
-      context: .
-      dockerfile: DockerFile
+    image: huni123/tododeoji
+    container_name: tododeoji
     depends_on:
       - mysql
       - redis
