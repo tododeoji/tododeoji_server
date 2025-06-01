@@ -39,6 +39,7 @@ class SecurityConfig(
         http
             .authorizeHttpRequests {
                 it.requestMatchers(HttpMethod.GET, "/auth/login").permitAll()
+                it.requestMatchers(HttpMethod.PATCH, "/auth").authenticated()
 
                 it.requestMatchers(HttpMethod.GET, "/favicon.ico").permitAll()
 
