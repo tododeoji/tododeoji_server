@@ -13,4 +13,8 @@ class RefreshTokenPersistenceAdapter(
 ) : RefreshTokenPort {
     override fun saveRefreshToken(refreshToken: RefreshToken): RefreshToken =
         refreshTokenRepository.save(refreshToken.toEntity()).toDomain()
+
+    override fun findByRefreshTokenAndUserId(refreshToken: String, userId: String): RefreshToken? =
+        refreshTokenRepository.findByRefreshTokenAndUserId(refreshToken, userId)
+            ?.toDomain()
 }
